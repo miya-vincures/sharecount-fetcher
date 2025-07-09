@@ -5,7 +5,7 @@ const fs = require('fs');
 // 認証情報とスプレッドシート情報
 const CREDENTIALS_PATH = './credentials.json';
 const SHEET_ID = '15V-kaXfNfJ9QQAufTNajfeAjcA7IuKLgR3sF3f8152A';
-const SHEET_NAME = 'digg';
+const SHEET_NAME = 'share';
 
 // 列番号 → A〜Z, AA〜 に変換する関数
 function columnToLetter(col) {
@@ -25,7 +25,7 @@ async function fetchDiggCount(url) {
       headers: { 'User-Agent': 'Mozilla/5.0' }
     });
     const html = res.data;
-    const match = html.match(/["']?diggCount["']?\s*[:=]\s*(\d+)/i);
+    const match = html.match(/["']?shareCount["']?\s*[:=]\s*(\d+)/i);
     return match ? parseInt(match[1]) : 0;
   } catch (err) {
     console.error(`❌ ${url}: ${err.message}`);
