@@ -1,0 +1,30 @@
+name: Fetch TikTok DiggCount
+
+on:
+  schedule:
+    - cron: '0 23 * * *'  # 毎日8時(JST)
+  workflow_dispatch:
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Write credentials.json from base64
+        run: echo "${{ secrets.GOOGLE_CREDS_BASE64 }}" | base64 -d > credentials.json
+
+      - name: Run playcount fetcher
+        env:
+          GOOGLE_CREDS_BASE64: ${{ secrets.GOOGLE_CREDS_BASE64 }}
+          SHEET_ID: ${{ secrets.SHEET_ID }}
+        run: node fetchPlayCountAndWrite.js
